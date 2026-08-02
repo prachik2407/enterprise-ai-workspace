@@ -1,6 +1,24 @@
 # 🚀 Enterprise AI Workspace
 
-## Backend
+## 📊 Sprint Progress
+
+| Sprint | Feature | Status |
+|---------|---------|--------|
+| Sprint 1 | Project Setup & FastAPI | ✅ |
+| Sprint 2 | FastAPI Architecture (Router + Config) | ✅ |
+| Sprint 3 | PostgreSQL + SQLAlchemy + User Model | ✅ |
+| Sprint 4 | Authentication | ⏳ In Progress |
+| Sprint 5 | React Frontend | ⬜ Pending |
+| Sprint 6 | File Upload | ⬜ Pending |
+| Sprint 7 | Document Parsing | ⬜ Pending |
+| Sprint 8 | RAG Pipeline | ⬜ Pending |
+| Sprint 9 | LangGraph | ⬜ Pending |
+| Sprint 10 | Azure Integration | ⬜ Pending |
+| Sprint 11 | Deployment | ⬜ Pending |
+
+---
+
+# 🖥️ Backend
 
 - [x] FastAPI Setup
 - [x] API Router
@@ -10,12 +28,14 @@
 - [x] Database Connection Test
 - [x] Alembic Initialization
 - [x] User Model
-- [ ] Registration API
+- [ ] User Registration API
 - [ ] Login API
 - [ ] JWT Authentication
 - [ ] Protected Routes
 
-## AI Features
+---
+
+# 🤖 AI Features
 
 - [ ] File Upload
 - [ ] PDF Parsing
@@ -26,15 +46,19 @@
 - [ ] RAG Pipeline
 - [ ] LangGraph
 
-## Frontend
+---
+
+# 🎨 Frontend
 
 - [ ] React Setup
-- [ ] Login Page
+- [ ] Authentication UI
 - [ ] Dashboard
 - [ ] Chat Interface
 - [ ] Upload UI
 
-## Deployment
+---
+
+# 🚀 Deployment
 
 - [ ] Docker
 - [ ] Azure
