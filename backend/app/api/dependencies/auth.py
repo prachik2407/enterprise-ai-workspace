@@ -14,7 +14,7 @@ from app.schemas.auth import TokenPayload
 from app.utils.security import decode_access_token
 
 oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="/api/v1/auth/login"
+    tokenUrl="/api/v1/auth/token"
 )
 
 
