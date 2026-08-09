@@ -64,3 +64,13 @@ def save_upload_file(
         upload_file.file.close()
 
     return destination_path
+
+def delete_file(
+    stored_path: Path,
+) -> None:
+    """
+    Delete a stored file from local storage.
+
+    Missing files are ignored so cleanup remains safe and idempotent.
+    """
+    stored_path.unlink(missing_ok=True)

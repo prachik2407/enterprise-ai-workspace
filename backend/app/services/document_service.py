@@ -19,7 +19,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.document import Document, DocumentStatus
 from app.repositories import document_repository
-from app.schemas.document import DocumentUploadResponse
+from app.schemas.document import DocumentResponse, DocumentUploadResponse
 from app.services import storage_service
 
 
@@ -131,3 +131,72 @@ async def upload_document(
         raise
 
     return DocumentUploadResponse.model_validate(created_document)
+
+async def list_user_documents(
+    db: AsyncSession,
+    user_id: UUID,
+) -> list[DocumentResponse]:
+    """
+    Return all documents belonging to the authenticated user.
+    """
+    documents = await document_repository.list_documents_by_user(
+        db=db,
+        user_id=user_id,
+    )
+
+    return [
+        DocumentResponse.model_validate(document)
+        for document in documents
+    ]
+
+
+async def get_user_document(
+    db: AsyncSession,
+    document_id: UUID,
+    user_id: UUID,
+) -> DocumentResponse:
+    """
+    Return a document only if it belongs to the authenticated user.
+
+    A missing document and a document belonging to another user are
+    intentionally treated the same way to avoid leaking resource existence.
+    """
+    document = await document_repository.get_document_by_id(
+        db=db,
+        document_id=document_id,
+    )
+
+    if document is None or document.user_id != user_id:
+        raise ValueError("Document not found")
+
+    return DocumentResponse.model_validate(document)
+
+
+async def delete_user_document(
+    db: AsyncSession,
+    document_id: UUID,
+    user_id: UUID,
+) -> None:
+    """
+    Delete a document only if it belongs to the authenticated user.
+
+    Both the database record and the physical file are removed.
+    """
+    document = await document_repository.get_document_by_id(
+        db=db,
+        document_id=document_id,
+    )
+
+    if document is None or document.user_id != user_id:
+        raise ValueError("Document not found")
+
+    storage_path = Path(document.storage_path)
+
+    # Delete the database record first.
+    await document_repository.delete_document(
+        db=db,
+        document=document,
+    )
+
+    # Then delete the physical file.
+    storage_service.delete_file(storage_path)

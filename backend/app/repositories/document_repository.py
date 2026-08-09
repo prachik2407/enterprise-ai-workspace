@@ -16,7 +16,7 @@ async def create_document(
     return document
 
 
-async def get_document(
+async def get_document_by_id(
     db: AsyncSession,
     document_id: uuid.UUID,
 ) -> Document | None:
@@ -35,6 +35,7 @@ async def list_documents_by_user(
         .where(Document.user_id == user_id)
         .order_by(Document.created_at.desc())
     )
+
     return list(result.scalars().all())
 
 
