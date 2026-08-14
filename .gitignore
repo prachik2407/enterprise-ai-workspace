@@ -20,3 +20,5 @@ Thumbs.db
 
 backend/storage/uploads/*
 !backend/storage/uploads/.gitkeep
+
+backend/storage/chroma/*
