@@ -1,15 +1,26 @@
+# Environment variables
+backend/.env
+backend/.env.*
+!backend/.env.example
+
 # Python
 __pycache__/
 *.py[cod]
 .venv/
 venv/
-.env
 
 # Node
 node_modules/
 
-# VS Code
+# IDE
 .vscode/
+.idea/
+
+# Local storage
+backend/storage/
+
+# ChromaDB
+backend/storage/chroma/
 
 # Logs
 *.log
@@ -17,8 +28,3 @@ node_modules/
 # OS
 .DS_Store
 Thumbs.db
-
-backend/storage/uploads/*
-!backend/storage/uploads/.gitkeep
-
-backend/storage/chroma/*

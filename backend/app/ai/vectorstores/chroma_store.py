@@ -41,12 +41,19 @@ class ChromaVectorStore(VectorStore):
         self,
         query_embedding: list[float],
         top_k: int = 5,
+        user_id: str | None = None,
     ) -> list[dict[str, Any]]:
         """Search for the most similar document chunks."""
+
+        where = None
+
+        if user_id is not None:
+            where = {"user_id": user_id}
 
         results = self.collection.query(
             query_embeddings=[query_embedding],
             n_results=top_k,
+            where=where,
         )
 
         documents = results.get("documents", [[]])[0]

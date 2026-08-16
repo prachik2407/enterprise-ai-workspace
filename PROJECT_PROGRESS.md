@@ -13,12 +13,14 @@
 | Sprint 7  | Document Parsing                       | ✅              |
 | Sprint 8  | Document Chunking                      | ✅              |
 | Sprint 9  | Embeddings                             | ✅              |
-| Sprint 10 | Vector Store / RAG                     | ⬜ Pending      |
-| Sprint 11 | LangChain                              | ⬜ Pending      |
-| Sprint 12 | LangGraph                              | ⬜ Pending      |
-| Sprint 13 | AI Data Analyst                        | ⬜ Pending      |
-| Sprint 14 | Azure Integration                      | ⬜ Pending      |
-| Sprint 15 | Deployment                             | ⬜ Pending      |
+| Sprint 10 | Vector Store / Retrieval               | ✅              |
+| Sprint 11 | RAG Prompt Pipeline                    | ✅              |
+| Sprint 12 | LLM Integration                        | ✅              |
+| Sprint 13 | LangChain                              | ⬜ Pending      |
+| Sprint 14 | LangGraph                              | ⬜ Pending      |
+| Sprint 15 | AI Data Analyst                        | ⬜ Pending      |
+| Sprint 16 | Azure Integration                      | ✅              |
+| Sprint 17 | Deployment                             | ⬜ Pending      |
 
 ---
 
@@ -53,8 +55,9 @@
 - [x] XLSX Parser
 - [x] Text Chunking
 - [x] Embedding Generation
-- [ ] Vector Database
-- [ ] RAG Pipeline
+- [x] Vector Database
+- [x] Document Indexing
+- [x] Semantic Retrieval
 
 ### Chunking Validation
 
@@ -62,40 +65,118 @@
 - Extracted text: 8,281 characters.
 - Chunking tested with `chunk_size=1000` and `chunk_overlap=200`.
 - Generated 11 chunks successfully.
+- Embedding model: `all-MiniLM-L6-v2`.
+- Embedding dimension: 384.
+- ChromaDB indexing tested successfully.
+- 11 document chunks indexed successfully.
+- Semantic search tested successfully.
 
 ---
 
-# 🤖 AI Features
+# 🤖 AI / RAG Pipeline
 
-- [x] Document Parsing
-- [x] Document Chunking
-- [x] Embeddings
-- [ ] Vector Database
-- [ ] RAG Pipeline
+- [x] PDF Parsing
+- [x] DOCX Parsing
+- [x] CSV Parsing
+- [x] XLSX Parsing
+- [x] Text Chunking
+- [x] Embedding Generation
+- [x] ChromaDB Vector Store
+- [x] Document Indexing
+- [x] Semantic Search
+- [x] User-specific Document Retrieval
+- [x] Document Retriever
+- [x] Context Builder
+- [x] Prompt Builder
+- [x] RAG Service
+- [x] Azure OpenAI Provider
+- [x] RAG Answer Generation
 - [ ] LangChain
 - [ ] LangGraph
-- [ ] AI Data Analyst
+
+### RAG Architecture
+
+```text
+User Question
+      ↓
+Document Retriever
+      ↓
+Query Embedding
+      ↓
+ChromaDB Semantic Search
+      ↓
+Relevant Document Chunks
+      ↓
+Context Builder
+      ↓
+Prompt Builder
+      ↓
+Azure OpenAI
+      ↓
+Grounded Answer
+```
 
 ---
 
-# 🎨 Frontend
+### Validation
 
-- [ ] React Setup
-- [ ] Authentication UI
-- [ ] Dashboard
-- [ ] Document Management UI
-- [ ] Chat Interface
-- [ ] Upload UI
-- [ ] Data Analysis UI
+- DOCX extraction tested successfully.
+- Extracted text: 8,281 characters.
+- Chunking tested with `chunk_size=1000` and `chunk_overlap=200`.
+- Generated 11 chunks.
+- Embedding model: `all-MiniLM-L6-v2`.
+- Embedding dimension: 384.
+- ChromaDB indexing tested successfully.
+- 11 document chunks indexed successfully.
+- Semantic search tested successfully.
+- User-specific metadata stored with document chunks.
+- ChromaDB retrieval supports `user_id` filtering.
+- Query for annual paid leave correctly retrieved:
+  `Employees receive 18 days of annual paid leave.`
+- RAG retrieval + context construction + prompt generation tested successfully.
+- Azure OpenAI connection tested successfully.
+- RAG answer generation tested successfully.
+- Source document and chunk metadata returned with generated answers.
 
 ---
 
-# 🚀 Deployment
+### Current Status
 
-- [ ] Docker
-- [ ] Azure OpenAI
-- [ ] Azure AI Search
-- [ ] Azure Blob Storage
-- [ ] PostgreSQL Deployment
-- [ ] Backend Deployment
-- [ ] Frontend Deployment
+The core document-based RAG pipeline is functional.
+
+Current flow:
+
+```text
+Document Upload
+      ↓
+File Storage
+      ↓
+Document Parsing
+      ↓
+Text Chunking
+      ↓
+Embedding Generation
+      ↓
+ChromaDB Indexing
+      ↓
+User-specific Retrieval
+      ↓
+Context Construction
+      ↓
+Prompt Construction
+      ↓
+Azure OpenAI
+      ↓
+Grounded Answer + Sources
+```
+
+---
+
+### Next Steps
+
+- Integrate RAG functionality with authenticated API endpoints.
+- Add LangChain abstraction where appropriate.
+- Introduce LangGraph for agent/workflow orchestration.
+- Continue frontend integration.
+- Implement AI Data Analyst capabilities.
+- Prepare deployment infrastructure.

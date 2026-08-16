@@ -18,9 +18,10 @@ class VectorStore(ABC):
 
     @abstractmethod
     def search(
-        self,
-        query_embedding: list[float],
-        top_k: int = 5,
+    self,
+    query_embedding: list[float],
+    top_k: int = 5,
+    user_id: str | None = None,
     ) -> list[dict[str, Any]]:
         """Search for the most similar chunks."""
         raise NotImplementedError

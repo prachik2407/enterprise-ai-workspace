@@ -21,16 +21,21 @@ The project is being developed as a full-stack AI application with a FastAPI bac
 - Document listing
 - Document deletion
 - Ownership-based authorization
+- File type validation
+- File size validation
 
 ### 📑 Document Processing
 - PDF text extraction
 - DOCX text extraction
 - CSV parsing
 - XLSX parsing
-- Text chunking with configurable chunk size and overlap
+- Configurable text chunking
+- Overlapping chunks
 - Sentence Transformer embeddings
 
-### 🔎 Current AI Pipeline
+---
+
+### 🔎 Current AI  / RAG Pipeline
 
 ```text
 Document
@@ -44,6 +49,30 @@ Text Extraction
 Text Chunking
     ↓
 Embedding Generation
+    ↓
+ChromaDB Vector Store
+    ↓
+Semantic Retrieval
+    ↓
+User-specific Filtering
+    ↓
+Context Construction
+    ↓
+Prompt Construction
+    ↓
+Azure OpenAI
+    ↓
+Grounded Answer + Sources
+```
+### 🤖 RAG Capabilities
+- Document indexing
+- Semantic document retrieval
+- User-specific document filtering
+- Context construction
+- Prompt construction
+- Azure OpenAI integration
+- Grounded answer generation
+- Source metadata returned with answers
 
 ## 🛠️ Tech Stack
 
@@ -57,17 +86,29 @@ Embedding Generation
 ### AI / ML
 - Sentence Transformers
 - Hugging Face
+- ChromaDB
+- Azure OpenAI
+- GPT-4.1-mini
+
+### Document Processing
+- PyPDF
+- python-docx
+- Pandas
+- OpenPyXL
 
 ### Frontend
 - React
 - TypeScript
 
+### AI Infrastructure
+- ChromaDB
+- Retrieval-Augmented Generation (RAG)
+- Sentence Transformers
+- Azure OpenAI
+
 ### Planned AI Infrastructure
-- Vector Database
-- RAG
 - LangChain
 - LangGraph
-- Azure OpenAI
 - Azure AI Search
 
 ### Deployment
@@ -77,34 +118,45 @@ Embedding Generation
 
 ## 🏗️ Architecture
 
-```text
-                    User
-                      │
-                      ▼
-                React Frontend
-                      │
-                      ▼
-                 FastAPI API
-                      │
-          ┌───────────┴───────────┐
-          │                       │
-          ▼                       ▼
-    Authentication          Document Management
-          │                       │
-          ▼                       ▼
-       PostgreSQL          File Storage + Parsing
-                                  │
-                                  ▼
-                              Chunking
-                                  │
-                                  ▼
-                             Embeddings
-                                  │
-                                  ▼
-                           Vector Database
-                                  │
-                                  ▼
-                                RAG
-                                  │
-                                  ▼
-                             AI Response
+                         User
+                           │
+                           ▼
+                    React Frontend
+                           │
+                           ▼
+                      FastAPI API
+                           │
+             ┌─────────────┴─────────────┐
+             │                           │
+             ▼                           ▼
+      Authentication             Document Management
+             │                           │
+             ▼                           ▼
+        PostgreSQL                File Storage
+                                         │
+                                         ▼
+                                  Document Parsing
+                                         │
+                                         ▼
+                                     Chunking
+                                         │
+                                         ▼
+                                    Embeddings
+                                         │
+                                         ▼
+                                   ChromaDB
+                                         │
+                                         ▼
+                               Semantic Retrieval
+                                         │
+                                         ▼
+                                  RAG Context
+                                         │
+                                         ▼
+                                Prompt Builder
+                                         │
+                                         ▼
+                                  Azure OpenAI
+                                         │
+                                         ▼
+                                  AI Response

@@ -24,10 +24,11 @@ class DocumentIndexer:
         self.vector_store = vector_store
 
     def index_document(
-        self,
-        file_path: Path,
-        document_id: UUID | str,
-        filename: str | None = None,
+    self,
+    file_path: Path,
+    document_id: UUID | str,
+    user_id: UUID | str,
+    filename: str | None = None,
     ) -> int:
         """
         Parse, chunk, embed and store a document.
@@ -64,6 +65,7 @@ class DocumentIndexer:
         )
 
         document_id_str = str(document_id)
+        user_id_str = str(user_id)
 
         # 5. Prepare metadata and unique IDs
         metadatas: list[dict[str, Any]] = []
@@ -73,6 +75,7 @@ class DocumentIndexer:
             metadatas.append(
                 {
                     "document_id": document_id_str,
+                    "user_id": user_id_str,
                     "chunk_index": index,
                     "filename": filename or file_path.name,
                 }

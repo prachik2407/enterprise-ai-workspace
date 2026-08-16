@@ -8,7 +8,11 @@ class DocumentRetriever:
         self.vector_store = ChromaVectorStore()
         self.top_k = top_k
 
-    def retrieve(self, query: str) -> list[dict]:
+    def retrieve(
+    self,
+    query: str,
+    user_id: str | None = None,
+    ) -> list[dict]:
         """
         Convert the user query into an embedding
         and retrieve the most relevant document chunks.
@@ -19,6 +23,7 @@ class DocumentRetriever:
         results = self.vector_store.search(
             query_embedding,
             top_k=self.top_k,
+            user_id=user_id
         )
 
         return results

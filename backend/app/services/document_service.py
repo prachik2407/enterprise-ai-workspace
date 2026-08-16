@@ -22,6 +22,14 @@ from app.repositories import document_repository
 from app.schemas.document import DocumentResponse, DocumentUploadResponse
 from app.services import storage_service
 
+from app.ai.chunking.text_chunker import TextChunker
+from app.ai.embeddings.embedding_service import EmbeddingService
+from app.ai.indexing.document_indexer import DocumentIndexer
+from app.ai.parsers.docx_parser import DOCXParser
+from app.ai.parsers.pdf_parser import PDFParser
+from app.ai.parsers.tabular_parser import TabularParser
+from app.ai.vectorstores.chroma_store import ChromaVectorStore
+
 
 # Maximum allowed file size: 25 MB
 MAX_FILE_SIZE_BYTES: int = 25 * 1024 * 1024
@@ -35,6 +43,23 @@ ALLOWED_CONTENT_TYPES: set[str] = {
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 }
 
+def _get_parser(file_path: Path):
+    """Return the appropriate parser for the uploaded file."""
+
+    suffix = file_path.suffix.lower()
+
+    if suffix == ".pdf":
+        return PDFParser()
+
+    if suffix == ".docx":
+        return DOCXParser()
+
+    if suffix in {".csv", ".xlsx"}:
+        return TabularParser()
+
+    raise ValueError(
+        f"Unsupported file extension: {suffix}"
+    )
 
 class InvalidFileTypeError(ValueError):
     """Raised when an uploaded file type is not supported."""
@@ -122,6 +147,23 @@ async def upload_document(
         created_document = await document_repository.create_document(
             db=db,
             document=document,
+        )
+
+        # 6. Index the document for RAG
+        parser = _get_parser(stored_path)
+
+        indexer = DocumentIndexer(
+            parser=parser,
+            chunker=TextChunker(),
+            embedding_service=EmbeddingService(),
+            vector_store=ChromaVectorStore(),
+        )
+
+        indexer.index_document(
+            file_path=stored_path,
+            document_id=created_document.id,
+            user_id=user_id,
+            filename=filename,
         )
 
     except Exception:
