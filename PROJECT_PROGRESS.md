@@ -16,7 +16,7 @@
 | Sprint 10 | Vector Store / Retrieval               | ✅              |
 | Sprint 11 | RAG Prompt Pipeline                    | ✅              |
 | Sprint 12 | LLM Integration                        | ✅              |
-| Sprint 13 | LangChain                              | ⬜ Pending      |
+| Sprint 13 | LangChain                              | 🔵 In Progress  |
 | Sprint 14 | LangGraph                              | ⬜ Pending      |
 | Sprint 15 | AI Data Analyst                        | ⬜ Pending      |
 | Sprint 16 | Azure Integration                      | ✅              |
@@ -54,6 +54,7 @@
 - [x] CSV Parser
 - [x] XLSX Parser
 - [x] Text Chunking
+- [x] LangChain RecursiveCharacterTextSplitter
 - [x] Embedding Generation
 - [x] Vector Database
 - [x] Document Indexing
@@ -64,11 +65,18 @@
 - DOCX text extraction tested successfully.
 - Extracted text: 8,281 characters.
 - Chunking tested with `chunk_size=1000` and `chunk_overlap=200`.
-- Generated 11 chunks successfully.
+- Original custom chunker generated 11 chunks.
+- LangChain `RecursiveCharacterTextSplitter` generated 11 chunks.
+- Both implementations produced the same first chunk length: 607 characters.
+- Both implementations produced the same last chunk length: 293 characters.
+- Both implementations produced the same average chunk length: 789 characters.
+- LangChain chunking integration preserved the existing `TextChunk` interface.
+- RAG retrieval tested successfully after the LangChain chunker integration.
+- Query for annual paid leave correctly returned:
+  `Employees receive 18 days of annual paid leave.`
 - Embedding model: `all-MiniLM-L6-v2`.
 - Embedding dimension: 384.
 - ChromaDB indexing tested successfully.
-- 11 document chunks indexed successfully.
 - Semantic search tested successfully.
 
 ---
@@ -91,7 +99,10 @@
 - [x] RAG Service
 - [x] Azure OpenAI Provider
 - [x] RAG Answer Generation
-- [ ] LangChain
+- [x] LangChain RecursiveCharacterTextSplitter
+- [ ] LangChain Embeddings
+- [ ] LangChain Prompt Templates
+- [ ] LangChain Azure Chat Model
 - [ ] LangGraph
 
 ### RAG Architecture
@@ -144,6 +155,8 @@ Grounded Answer
 
 The core document-based RAG pipeline is functional.
 
+The first LangChain integration is also complete. The custom text chunking implementation has been replaced internally with LangChain's `RecursiveCharacterTextSplitter` while preserving the existing application-level chunking interface.
+
 Current flow:
 
 ```text
@@ -174,8 +187,11 @@ Grounded Answer + Sources
 
 ### Next Steps
 
+- Complete remaining LangChain integrations.
+- Evaluate LangChain embeddings abstraction.
+- Integrate LangChain prompt templates.
+- Integrate `AzureChatOpenAI` where appropriate.
 - Integrate RAG functionality with authenticated API endpoints.
-- Add LangChain abstraction where appropriate.
 - Introduce LangGraph for agent/workflow orchestration.
 - Continue frontend integration.
 - Implement AI Data Analyst capabilities.
