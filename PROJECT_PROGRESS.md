@@ -100,7 +100,7 @@
 - [x] Azure OpenAI Provider
 - [x] RAG Answer Generation
 - [x] LangChain RecursiveCharacterTextSplitter
-- [ ] LangChain Embeddings
+- [x] LangChain Embeddings
 - [ ] LangChain Prompt Templates
 - [ ] LangChain Azure Chat Model
 - [ ] LangGraph
@@ -155,7 +155,7 @@ Grounded Answer
 
 The core document-based RAG pipeline is functional.
 
-The first LangChain integration is also complete. The custom text chunking implementation has been replaced internally with LangChain's `RecursiveCharacterTextSplitter` while preserving the existing application-level chunking interface.
+The first LangChain integrations are also complete. The custom text chunking implementation has been replaced internally with LangChain's `RecursiveCharacterTextSplitter`, and embedding generation now uses a LangChain Hugging Face adapter while preserving the existing application-level embedding interface.
 
 Current flow:
 
@@ -166,9 +166,9 @@ File Storage
       ↓
 Document Parsing
       ↓
-Text Chunking
+LangChain Text Chunking
       ↓
-Embedding Generation
+LangChain Hugging Face Embeddings
       ↓
 ChromaDB Indexing
       ↓
@@ -188,7 +188,6 @@ Grounded Answer + Sources
 ### Next Steps
 
 - Complete remaining LangChain integrations.
-- Evaluate LangChain embeddings abstraction.
 - Integrate LangChain prompt templates.
 - Integrate `AzureChatOpenAI` where appropriate.
 - Integrate RAG functionality with authenticated API endpoints.

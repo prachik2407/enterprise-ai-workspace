@@ -1,10 +1,11 @@
-from app.ai.embeddings.embedding_service import EmbeddingService
+from app.ai.embeddings.base import BaseEmbeddingService
+from app.ai.embeddings.huggingface_embeddings import HuggingFaceEmbeddingService
 from app.ai.vectorstores.chroma_store import ChromaVectorStore
 
 
 class DocumentRetriever:
-    def __init__(self, top_k: int = 5):
-        self.embedding_service = EmbeddingService()
+    def __init__(self, top_k: int = 5, embedding_service: BaseEmbeddingService | None = None):
+        self.embedding_service = embedding_service or HuggingFaceEmbeddingService()
         self.vector_store = ChromaVectorStore()
         self.top_k = top_k
 

@@ -3,7 +3,7 @@ from typing import Any
 from uuid import UUID
 
 from app.ai.chunking.text_chunker import TextChunker
-from app.ai.embeddings.embedding_service import EmbeddingService
+from app.ai.embeddings.base import BaseEmbeddingService
 from app.ai.parsers.base import BaseParser
 from app.ai.vectorstores.chroma_store import ChromaVectorStore
 
@@ -15,7 +15,7 @@ class DocumentIndexer:
         self,
         parser: BaseParser,
         chunker: TextChunker,
-        embedding_service: EmbeddingService,
+        embedding_service: BaseEmbeddingService,
         vector_store: ChromaVectorStore,
     ) -> None:
         self.parser = parser

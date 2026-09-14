@@ -1,7 +1,9 @@
 from sentence_transformers import SentenceTransformer
 
+from app.ai.embeddings.base import BaseEmbeddingService
 
-class EmbeddingService:
+
+class EmbeddingService(BaseEmbeddingService):
     """Generate vector embeddings for text."""
 
     def __init__(

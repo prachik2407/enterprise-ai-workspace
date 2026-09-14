@@ -22,8 +22,8 @@ from app.repositories import document_repository
 from app.schemas.document import DocumentResponse, DocumentUploadResponse
 from app.services import storage_service
 
-from app.ai.chunking.text_chunker import TextChunker
-from app.ai.embeddings.embedding_service import EmbeddingService
+from app.ai.chunking.langchain_chunker import LangChainTextChunker
+from app.ai.embeddings.huggingface_embeddings import HuggingFaceEmbeddingService
 from app.ai.indexing.document_indexer import DocumentIndexer
 from app.ai.parsers.docx_parser import DOCXParser
 from app.ai.parsers.pdf_parser import PDFParser
@@ -154,8 +154,8 @@ async def upload_document(
 
         indexer = DocumentIndexer(
             parser=parser,
-            chunker=TextChunker(),
-            embedding_service=EmbeddingService(),
+            chunker=LangChainTextChunker(),
+            embedding_service=HuggingFaceEmbeddingService(),
             vector_store=ChromaVectorStore(),
         )
 
