@@ -1,4 +1,4 @@
-from app.ai.llm.azure_openai import AzureOpenAIProvider
+from app.ai.llm.azure_chat import AzureChatProvider
 from app.ai.rag.context_builder import ContextBuilder
 from app.ai.rag.prompt_builder import PromptBuilder
 from app.ai.rag.retriever import DocumentRetriever
@@ -14,7 +14,7 @@ class RAGService:
         self.retriever = DocumentRetriever(top_k=top_k)
         self.context_builder = ContextBuilder()
         self.prompt_builder = PromptBuilder()
-        self.llm = AzureOpenAIProvider()
+        self.llm = AzureChatProvider()
 
     def build_prompt(
         self,

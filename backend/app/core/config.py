@@ -16,6 +16,11 @@ class Settings(BaseSettings):
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
 
+    AZURE_OPENAI_ENDPOINT: str
+    AZURE_OPENAI_API_KEY: str
+    AZURE_OPENAI_API_VERSION: str
+    AZURE_OPENAI_CHAT_DEPLOYMENT: str
+
     model_config = SettingsConfigDict(
     env_file=".env",
     extra="ignore"
