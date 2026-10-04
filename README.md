@@ -35,7 +35,7 @@ The project is being developed as a full-stack AI application with a FastAPI bac
 - Configurable text chunking
 - Overlapping chunks
 - LangChain `RecursiveCharacterTextSplitter`
-- Sentence Transformer embeddings
+- Hugging Face embeddings via LangChain
 
 ---
 
@@ -62,7 +62,7 @@ User-specific Filtering
     ↓
 Context Construction
     ↓
-Prompt Construction
+LangChain Prompt Template
     ↓
 Azure OpenAI
     ↓
@@ -82,10 +82,33 @@ Grounded Answer + Sources
 
 ### 🧩 LangChain Integration
 
-The first LangChain component has been integrated into the document processing pipeline.
+LangChain components have been integrated incrementally into the existing application architecture while preserving application-level abstractions.
 
 #### Recursive Character Text Splitting
-The custom text chunking implementation has been replaced internally with LangChain's: ```RecursiveCharacterTextSplitter``` while preserving the existing application-level TextChunker interface.
+
+The custom text chunking implementation has been replaced internally with LangChain's `RecursiveCharacterTextSplitter` while preserving the existing application-level `TextChunk` interface.
+
+#### Hugging Face Embeddings
+
+Embedding generation now uses LangChain's `HuggingFaceEmbeddings` adapter with the `all-MiniLM-L6-v2` model.
+
+The application exposes a `BaseEmbeddingService` interface, allowing the underlying embedding implementation to remain replaceable without coupling the rest of the RAG pipeline directly to LangChain.
+
+Embedding dimension: `384`.
+
+#### RAG Prompt Templates
+
+RAG prompt construction now uses LangChain's `ChatPromptTemplate` through a dedicated `RAGPrompt` component.
+
+The prompt enforces:
+
+- Context-grounded answering
+- No fabricated information
+- Explicit fallback when the answer is not present in the supplied context
+- Concise answers
+- Protection of internal instructions
+
+The existing `PromptBuilder` remains as an application-level wrapper around the LangChain prompt implementation.
 
 #### Validation
 The custom chunker and LangChain splitter were compared using the same DOCX document with:
@@ -120,6 +143,8 @@ RAG retrieval was also tested after the integration and continued to return the 
 - Azure OpenAI
 - GPT-4.1-mini
 - LangChain Text Splitters
+- LangChain Hugging Face Embeddings
+- LangChain Core Prompt Templates
 
 ### Document Processing
 
@@ -169,22 +194,22 @@ RAG retrieval was also tested after the integration and continued to return the 
       Authentication             Document Management
              │                           │
              ▼                           ▼
-        PostgreSQL                File Storage
+        PostgreSQL                  File Storage
                                          │
                                          ▼
                                   Document Parsing
                                          │
                                          ▼
-                            LangChain Text Splitting
+                                LangChain Text Splitting
                                          │
                                          ▼
                                     Embeddings
                                          │
                                          ▼
-                                   ChromaDB
+                                     ChromaDB
                                          │
                                          ▼
-                               Semantic Retrieval
+                                  Semantic Retrieval
                                          │
                                          ▼
                                   User-specific Filtering
@@ -196,13 +221,16 @@ RAG retrieval was also tested after the integration and continued to return the 
                                 Prompt Builder
                                          │
                                          ▼
+                            LangChain ChatPromptTemplate
+                                         │
+                                         ▼
                                   Azure OpenAI
                                          │
                                          ▼
                               Grounded AI Response
                                          │
                                          ▼
-                                   Sources
+                                      Sources
 
 ## 📊 Project Status
 
@@ -217,10 +245,12 @@ RAG retrieval was also tested after the integration and continued to return the 
 - Text chunking
 - LangChain RecursiveCharacterTextSplitter
 - Sentence Transformer embeddings
+- LangChain Hugging Face embeddings
 - ChromaDB vector storage
 - Semantic retrieval
 - User-specific vector retrieval
 - RAG prompt pipeline
+- LangChain RAG prompt templates
 - Azure OpenAI integration
 - Grounded RAG answer generation
 - Source metadata

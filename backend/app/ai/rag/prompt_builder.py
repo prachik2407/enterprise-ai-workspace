@@ -1,25 +1,20 @@
+from app.ai.prompts.rag_prompt import RAGPrompt
+
+
 class PromptBuilder:
-    def build(self, question: str, context: str) -> str:
-        """
-        Build a prompt using the user's question
-        and the retrieved document context.
-        """
+    """Application-level wrapper for the RAG prompt."""
 
-        return f"""
-You are an AI assistant that answers questions using the provided document context.
+    def __init__(self) -> None:
+        self.rag_prompt = RAGPrompt()
 
-Use only the information available in the context to answer the question.
+    def build(
+        self,
+        question: str,
+        context: str,
+    ) -> str:
+        """Build an LLM-ready RAG prompt."""
 
-If the answer cannot be found in the context, say:
-"I could not find the answer in the provided documents."
-
-Do not make up information.
-
-Context:
-{context}
-
-Question:
-{question}
-
-Answer:
-""".strip()
+        return self.rag_prompt.build(
+            question=question,
+            context=context,
+        )

@@ -101,7 +101,7 @@
 - [x] RAG Answer Generation
 - [x] LangChain RecursiveCharacterTextSplitter
 - [x] LangChain Embeddings
-- [ ] LangChain Prompt Templates
+- [x] LangChain Prompt Templates
 - [ ] LangChain Azure Chat Model
 - [ ] LangGraph
 
