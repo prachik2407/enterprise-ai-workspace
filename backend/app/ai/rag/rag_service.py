@@ -16,6 +16,18 @@ class RAGService:
         self.prompt_builder = PromptBuilder()
         self.llm = AzureChatProvider()
 
+    def _build_prompt_from_results(
+    self,
+    question: str,
+    results: list[dict],
+    ) -> str:
+        context = self.context_builder.build(results)
+
+        return self.prompt_builder.build(
+            question=question,
+            context=context,
+        )
+
     def build_prompt(
         self,
         question: str,
@@ -30,17 +42,15 @@ class RAGService:
             user_id=user_id,
         )
 
-        context = self.context_builder.build(results)
-
-        return self.prompt_builder.build(
+        return self._build_prompt_from_results(
             question=question,
-            context=context,
+            results=results,
         )
 
     def answer(
-        self,
-        question: str,
-        user_id: str | None = None,
+    self,
+    question: str,
+    user_id: str | None = None,
     ) -> dict:
         """
         Retrieve relevant context, generate a grounded answer,
@@ -48,15 +58,13 @@ class RAGService:
         """
 
         results = self.retriever.retrieve(
-            question,
-            user_id=user_id,
+        question,
+        user_id=user_id,
         )
 
-        context = self.context_builder.build(results)
-
-        prompt = self.prompt_builder.build(
+        prompt = self._build_prompt_from_results(
             question=question,
-            context=context,
+            results=results,
         )
 
         answer = self.llm.generate(prompt)
