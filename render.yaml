@@ -1,0 +1,58 @@
+services:
+  - type: web
+    name: enterprise-ai-workspace-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/v1/health
+    disk:
+      name: enterprise-ai-workspace-data
+      mountPath: /var/data
+      sizeGB: 5
+    envVars:
+      - key: APP_NAME
+        value: Enterprise AI Workspace
+      - key: APP_VERSION
+        value: 1.0.0
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: enterprise-ai-workspace-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 60
+      - key: AZURE_OPENAI_ENDPOINT
+        sync: false
+      - key: AZURE_OPENAI_API_KEY
+        sync: false
+      - key: AZURE_OPENAI_API_VERSION
+        value: "2025-04-14"
+      - key: AZURE_OPENAI_CHAT_DEPLOYMENT
+        sync: false
+      - key: CORS_ORIGINS
+        value: https://enterprise-ai-workspace-frontend.onrender.com,http://localhost:5173
+      - key: STORAGE_ROOT
+        value: /var/data
+      - key: MAX_UPLOAD_SIZE_MB
+        value: 25
+
+  - type: web
+    name: enterprise-ai-workspace-frontend
+    runtime: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://enterprise-ai-workspace-api.onrender.com
+
+databases:
+  - name: enterprise-ai-workspace-db
+    databaseName: enterprise_ai_workspace
+    user: enterprise_ai_workspace
+    plan: basic-256mb
